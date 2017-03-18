@@ -8,11 +8,11 @@ This plugin adds a button to your TinyMCE editor which uploads selected file to 
 
 ## Usage
 
-### 1. Add plugin javascript 
+### 1. Add plugin javascript
 Add ```dist/tinymce-aws-s3-upload-plugin.min.js``` in to your html.
- 
+
 Or
- 
+
 ```bash
 npm i tinymce-aws-s3-upload-plugin
 ```
@@ -20,7 +20,7 @@ npm i tinymce-aws-s3-upload-plugin
 import 'tinymce-aws-s3-upload-plugin'
 ```
 
-### 2. Add AWS SDK javascript 
+### 2. Add AWS SDK javascript
 -You can skip this part if you done with the authentication to AWS.
 
 Add ```https://sdk.amazonaws.com/js/aws-sdk-2.5.3.min.js``` in to your html.
@@ -28,7 +28,7 @@ Add ```https://sdk.amazonaws.com/js/aws-sdk-2.5.3.min.js``` in to your html.
 #### More information about Configuring AWS SDK in the browser
 AWS doesn’t recommend to use them on front-end code(js) because if somebody take a look and get these keyId and secretKey they can reach your AWS resources.[Here you can find more information.](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/browser-configuring.html)
 
-#### Secure way to do add accessKeyId & secretAccessKey 
+#### Secure way to do add accessKeyId & secretAccessKey
 
 ##### 2.1 Create a new IAM user
 
@@ -46,7 +46,8 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
     "Statement": [
         {
             "Action": [
-                "s3:PutObject"
+                "s3:PutObject",
+                "s3:PutObjectAcl"
             ],
             "Effect": "Allow",
             "Resource": [
@@ -74,7 +75,7 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
 ![youHaveIAMUserWhichAccessS3Only](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/youHaveIAMUserWhichAccessS3Only.png)
 
 ---
- 
+
 ### 3. Configure Plugin and Init TinyMCE
 ```javascript
 tinymce.init({
@@ -139,5 +140,3 @@ npm run development
 Thanks for reading.
 
 Thanks for reading.
-
-

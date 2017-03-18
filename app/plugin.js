@@ -2,6 +2,7 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
 
     //Grab the params from TinyMCE init
     const {bucketName, folderName = '', awsAuth, buttonText = 'Upload File', progress, secondFileSelectedBeforeFirstUpload} = editor.getParam('Awss3UploadSettings');
+    const {secretAccessKey, accessKeyId, region} = awsAuth;
     let inProgress = false;
 
     //Initializing parameters control
@@ -11,7 +12,6 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
     }
     //awsAuth control
     if (awsAuth && typeof awsAuth === 'object') {
-        const {secretAccessKey, accessKeyId, region} = awsAuth;
         if (!accessKeyId) {
             console.log('`awsAuth` parameter missing `accessKeyId` property on init AwsS3Upload TinyMCE plugin.');
             return false;
@@ -24,11 +24,11 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
             console.log('`awsAuth` parameter missing `secretAccessKey` property on init AwsS3Upload TinyMCE plugin.');
             return false;
         }
-        //Ok let's update the auth config
-        AWS.config.region = region;
+        //Let's update the auth config
         AWS.config.update({
-            accessKeyId: accessKeyId,
-            secretAccessKey: secretAccessKey
+            region,
+            accessKeyId,
+            secretAccessKey
         });
     }
 
@@ -76,40 +76,40 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
 
             let extension = file.name.split('.').pop(),
                 fileName = file.name.split('.' + extension)[0],
-                objKey = (folderName) + '/' + fileName + '-' + Date.now() + '.' + extension,
+                objKey = (folderName ? `${folderName}/` : '') + fileName + '-' + Date.now() + '.' + extension,
                 params = {
                     Key: objKey,
                     ContentType: file.type,
                     Body: file,
                     ACL: 'public-read'
                 };
+            bucket
+                .putObject(params)
+                .on('httpUploadProgress', progressObj => {
+                    let progressPercentage = parseInt((progressObj.loaded / progressObj.total) * 100);
 
-            bucket.putObject(params).on('httpUploadProgress', progressObj => {
-                let progressPercentage = parseInt((progressObj.loaded / progressObj.total) * 100);
+                    // Change the value of progressbar. No matter if it's visible or not
+                    progressEl.value = progressPercentage;
 
-                // Change the value of progressbar. No matter if it's visible or not
-                progressEl.value = progressPercentage;
+                    // Call the callback function if it's exists
+                    if (progress.callback && typeof progress.callback === 'function')
+                        progress.callback(progressPercentage);
 
-                // Call the callback function if it's exists
-                if (progress.callback && typeof progress.callback === 'function')
-                    progress.callback(progressPercentage);
+                }).send((err, data) => {
 
-            }).send((err, data) => {
+                    inProgress = false;
+                    progressEl.style.cssText = 'display:none';
 
-                inProgress = false;
-                progressEl.style.cssText = 'display:none';
+                    if (err) {
+                        if (progress.errorCallback && typeof progress.errorCallback === 'function')
+                            progress.errorCallback(err);
+                    } else {
+                        let url =`https://s3-${region}.amazonaws.com/${bucketName}/${objKey}`;
+                        if(progress.successCallback && typeof progress.successCallback === 'function')
+                            progress.successCallback(editor,url);
 
-                if (err) {
-                    if (progress.errorCallback && typeof progress.errorCallback === 'function')
-                        progress.errorCallback(err);
-                } else {
-                    var url = 'https://s3.amazonaws.com/' + bucketName + '/' + objKey;
-
-                    if(progress.successCallback && typeof progress.successCallback === 'function')
-                        progress.successCallback(editor,url);
-
-                }
-            });
+                    }
+                });
 
         } else {
 

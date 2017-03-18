@@ -15,12 +15,12 @@ class DemoTinyMce extends React.Component {
             toolbar: 'AwsS3UploadButton',
             Awss3UploadSettings: {
                 buttonText: 'Upload to AWS S3',  // opt
-                folderName: 'testing',           // opt
-                bucketName: 'thy-wiki',
+                folderName: 'test',           // opt
+                bucketName: 'tinymce-aws-s3-upload',
                 awsAuth: {                       // opt if auth done in html before
-                    region: 'us-east-1',
-                    accessKeyId: 'AKIAJAZ7WVGXBDMJBHVA',
-                    secretAccessKey: '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'
+                    region: 'us-west-1',
+                    accessKeyId: 'AKIAI5LLXK3LLK4ISBPQ',
+                    secretAccessKey: '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'
                 },
                 progress: {
                     bar:true,                    //opt default=true
@@ -28,7 +28,7 @@ class DemoTinyMce extends React.Component {
                         console.log(progress)
                     },
                     errorCallback: err => {      //opt
-                        console.log(error)
+                        console.log(err)
                     },
                     successCallback:(editor,url) => {  //opt
 
