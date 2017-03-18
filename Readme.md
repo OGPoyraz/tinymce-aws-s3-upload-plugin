@@ -1,4 +1,4 @@
-#tinymce-aws-s3-upload-plugin
+# tinymce-aws-s3-upload-plugin
 
 This plugin adds a button to your TinyMCE editor which uploads selected file to your Amazon S3 bucket.
 
@@ -32,12 +32,12 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
 
 ##### 2.1 Create a new IAM user
 
-![createAnIamUser](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/.png)
+![createAnIamUser](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createAnIamUser.png)
 
 ##### 2.2 Create a new policy which is only have access policy for S3 putObject
 
-![createNewPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/.png)
-![allowOnlyPutObjectPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/.png)
+![createNewPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createNewPolicy.png)
+![allowOnlyPutObjectPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/allowOnlyPutObjectPolicy.png)
 
 ##### 2.3 Select the policy for new User
 
