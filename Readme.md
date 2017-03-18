@@ -32,7 +32,7 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
 
 ##### 2.1 Create a new IAM user
 
-![createAnIamUser](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createAnIamUser.png)
+![createAnIAMUser](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createAnIAMUser.png)
 
 ##### 2.2 Create a new policy which is only have access policy for S3 putObject
 
