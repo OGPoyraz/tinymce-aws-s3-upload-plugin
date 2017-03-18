@@ -1,0 +1,114 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "tinymce-aws-s3-upload-plugin",
+        "scope": null,
+        "escapedName": "tinymce-aws-s3-upload-plugin",
+        "name": "tinymce-aws-s3-upload-plugin",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/ogpoyraz/Documents/Projects/-Gits/tinymce-aws-s3-upload-plugin"
+    ]
+  ],
+  "_from": "tinymce-aws-s3-upload-plugin@latest",
+  "_id": "tinymce-aws-s3-upload-plugin@1.0.1",
+  "_inCache": true,
+  "_location": "/tinymce-aws-s3-upload-plugin",
+  "_nodeVersion": "6.2.2",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/tinymce-aws-s3-upload-plugin-1.0.1.tgz_1473671236971_0.29391971277073026"
+  },
+  "_npmUser": {
+    "name": "ogpoyraz",
+    "email": "omergoktugpoyraz@gmail.com"
+  },
+  "_npmVersion": "3.10.7",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "tinymce-aws-s3-upload-plugin",
+    "scope": null,
+    "escapedName": "tinymce-aws-s3-upload-plugin",
+    "name": "tinymce-aws-s3-upload-plugin",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/tinymce-aws-s3-upload-plugin/-/tinymce-aws-s3-upload-plugin-1.0.1.tgz",
+  "_shasum": "44d87a03d7261c330cb7c012baa49e6f387a420c",
+  "_shrinkwrap": null,
+  "_spec": "tinymce-aws-s3-upload-plugin",
+  "_where": "/Users/ogpoyraz/Documents/Projects/-Gits/tinymce-aws-s3-upload-plugin",
+  "author": {
+    "name": "OGPoyraz"
+  },
+  "bugs": {
+    "url": "https://github.com/OGPoyraz/tinymce-aws-s3-upload-plugin/issues"
+  },
+  "dependencies": {
+    "babel-loader": "^6.2.5",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1"
+  },
+  "description": "This plugin entegrates a Amazon S3 upload button to your TinyMCE.",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "babili": "0.0.4",
+    "browser-sync": "^2.15.0",
+    "browser-sync-webpack-plugin": "^1.1.2",
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.22.0",
+    "node-sass": "^3.9.3",
+    "path": "^0.12.7",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "44d87a03d7261c330cb7c012baa49e6f387a420c",
+    "tarball": "https://registry.npmjs.org/tinymce-aws-s3-upload-plugin/-/tinymce-aws-s3-upload-plugin-1.0.1.tgz"
+  },
+  "gitHead": "50da47b45099e72f965477aa3cb13fa0ca52895b",
+  "homepage": "https://github.com/OGPoyraz/tinymce-aws-s3-upload-plugin#readme",
+  "keywords": [
+    "amazon-s3-tinymce",
+    "aws-s3-upload-tinymce",
+    "tinymce",
+    "amazon-s3",
+    "amazon-s3-upload"
+  ],
+  "license": "MIT",
+  "main": "dist/aws-s3-tinymce-upload.min.js",
+  "maintainers": [
+    {
+      "name": "ogpoyraz",
+      "email": "omergoktugpoyraz@gmail.com"
+    }
+  ],
+  "name": "tinymce-aws-s3-upload-plugin",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OGPoyraz/tinymce-aws-s3-upload-plugin.git"
+  },
+  "scripts": {
+    "build": "babel --no-comments app/plugin.js -o dist/tinymce-aws-s3-upload-plugin.min.js",
+    "clean": "rm -rf public",
+    "development": "npm run clean && webpack --watch",
+    "prepublish": "npm run build"
+  },
+  "version": "1.0.1"
+}
