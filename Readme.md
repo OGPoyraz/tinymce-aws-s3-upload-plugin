@@ -70,9 +70,15 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
 
 ---
 
-##### 2.4 Note  accessKeyId & secretAccessKey for this user. Now you can safely use these keys
+##### 2.4 Note accessKeyId & secretAccessKey for this user. Now you can safely use these keys
 
 ![youHaveIAMUserWhichAccessS3Only](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/youHaveIAMUserWhichAccessS3Only.png)
+
+---
+
+##### 2.5 Set CORS configuration for your bucket for additional safety
+
+![corsConfigForS3Bucket](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/corsConfigForS3Bucket.png)
 
 ---
 
