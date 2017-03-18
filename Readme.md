@@ -32,16 +32,13 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
 
 ##### 2.1 Create a new IAM user
 
-![createAnIAMUser](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createAnIAMUser.png)
+![createAnIAMUser](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createIAMUser.png)
+
+---
 
 ##### 2.2 Create a new policy which is only have access policy for S3 putObject
 
 ![createNewPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/createNewPolicy.png)
-![allowOnlyPutObjectPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/allowOnlyPutObjectPolicy.png)
-
-##### 2.3 Select the policy for new User
-
-![refreshThePolicyTab](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/refreshThePolicyTab.png)
 
 ```javascript
 {
@@ -60,15 +57,23 @@ AWS doesn’t recommend to use them on front-end code(js) because if somebody ta
 }
 
 ```
+
+![allowOnlyPutObjectPolicy](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/allowOnlyPutObjectPolicy.png)
+
+---
+
+##### 2.3 Select the policy for new User
+
+![refreshThePolicyTab](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/refreshThePolicyTab.png)
 ![selectTheNewPolicyYouAdded](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/selectTheNewPolicyYouAdded.png)
 
-
+---
 
 ##### 2.4 Note  accessKeyId & secretAccessKey for this user. Now you can safely use these keys
 
 ![youHaveIAMUserWhichAccessS3Only](http://ogpoyraz.com/tinymce-amazon-s3-upload-plugin/youHaveIAMUserWhichAccessS3Only.png)
 
-
+---
  
 ### 3. Configure Plugin and Init TinyMCE
 ```javascript
