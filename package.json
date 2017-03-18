@@ -110,5 +110,5 @@
     "development": "npm run clean && webpack --watch",
     "prepublish": "npm run build"
   },
-  "version": "1.0.1"
+  "version": "1.0.2"
 }
