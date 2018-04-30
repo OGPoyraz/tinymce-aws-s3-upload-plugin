@@ -17,6 +17,15 @@ class DemoTinyMce extends React.Component {
                 buttonText: 'Upload to AWS S3',  // opt
                 folderName: 'test',           // opt
                 bucketName: 'tinymce-aws-s3-upload',
+                conditions: {
+                  contentLengthRange: {
+                    min:0,
+                    max:2048,
+                    errorCallback: err => {
+                      alert('sorry, but: '+err.message);
+                    }
+                  }
+                },
                 awsAuth: {                       // opt if auth done in html before
                     region: 'us-west-1',
                     accessKeyId: 'AKIAI5LLXK3LLK4ISBPQ',
