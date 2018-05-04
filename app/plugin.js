@@ -108,7 +108,7 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
                         if (progress.errorCallback && typeof progress.errorCallback === 'function')
                             progress.errorCallback(err);
                     } else {
-                        let url =`https://s3-${region}.amazonaws.com/${bucketName}/${objKey}`;
+                        let url = `https://${bucketName}.s3.amazonaws.com/${objKey}`;
                         if(progress.successCallback && typeof progress.successCallback === 'function')
                             progress.successCallback(editor,url);
 
@@ -146,6 +146,8 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
         let err = new RangeError(
           `The content length of '${file.name}' must be between ${contentLengthRange.min} and ${contentLengthRange.max} bytes.`
         );
+
+        //err.fileSize = file.size;
 
         if (contentLengthRange.errorCallback && typeof contentLengthRange.errorCallback === 'function')
             contentLengthRange.errorCallback(err);
