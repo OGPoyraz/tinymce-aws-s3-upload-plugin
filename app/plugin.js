@@ -1,8 +1,10 @@
 tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
 
     //Grab the params from TinyMCE init
-    const {bucketName, folderName = '', awsAuth, buttonText = 'Upload File', progress, secondFileSelectedBeforeFirstUpload} = editor.getParam('Awss3UploadSettings');
+    const {bucketName, folderName = '', awsAuth, buttonText = 'Upload File', conditions={}, progress, secondFileSelectedBeforeFirstUpload} = editor.getParam('Awss3UploadSettings');
     const {secretAccessKey, accessKeyId, region} = awsAuth;
+    const {contentLengthRange={min:0, max:null}} = conditions;
+
     let inProgress = false;
 
     //Initializing parameters control
@@ -65,6 +67,8 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
         //If file exists
         if (file) {
 
+            checkContentLenghtRange(file);
+
             // Put the progress bar inside content area of TinyMCE
             contentAreaContainer.parentNode.insertBefore(progressEl, contentAreaContainer);
             if (progress.bar && typeof progress.bar === 'boolean')
@@ -104,7 +108,7 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
                         if (progress.errorCallback && typeof progress.errorCallback === 'function')
                             progress.errorCallback(err);
                     } else {
-                        let url =`https://s3-${region}.amazonaws.com/${bucketName}/${objKey}`;
+                        let url = `https://${bucketName}.s3.amazonaws.com/${objKey}`;
                         if(progress.successCallback && typeof progress.successCallback === 'function')
                             progress.successCallback(editor,url);
 
@@ -131,7 +135,26 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
 
             }
         }
-    })
+    });
+
+    function checkContentLenghtRange(file) {
+      let isContentLengthOutOfRange =
+        ( typeof contentLengthRange.min === 'number' && file.size < contentLengthRange.min)
+          || (typeof contentLengthRange.max === 'number' && file.size > contentLengthRange.max );
+
+      if(isContentLengthOutOfRange) {
+        let err = new RangeError(
+          `The content length of '${file.name}' must be between ${contentLengthRange.min} and ${contentLengthRange.max} bytes.`
+        );
+
+        //err.fileSize = file.size;
+
+        if (contentLengthRange.errorCallback && typeof contentLengthRange.errorCallback === 'function')
+            contentLengthRange.errorCallback(err);
+
+        throw err;
+      }
+    }
 
 
 });
