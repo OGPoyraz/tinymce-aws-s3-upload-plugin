@@ -1,10 +1,16 @@
-tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
-
+tinymce.PluginManager.add('AwsS3Upload', (editor, url) => {
     //Grab the params from TinyMCE init
-    const {bucketName, folderName = '', awsAuth, buttonText = 'Upload File', conditions={}, progress, secondFileSelectedBeforeFirstUpload} = editor.getParam('Awss3UploadSettings');
+    const {
+        bucketName,
+        folderName = '',
+        awsAuth,
+        buttonText = 'Upload File',
+        conditions = {},
+        progress,
+        secondFileSelectedBeforeFirstUpload
+    } = editor.getParam('Awss3UploadSettings');
     const {secretAccessKey, accessKeyId, region} = awsAuth;
-    const {contentLengthRange={min:0, max:null}} = conditions;
-
+    const {contentLengthRange = {min: 0, max: null}} = conditions;
     let inProgress = false;
 
     //Initializing parameters control
@@ -12,6 +18,7 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
         console.log('`bucketName` parameter missing on init AwsS3Upload TinyMCE plugin.');
         return false;
     }
+
     //awsAuth control
     if (awsAuth && typeof awsAuth === 'object') {
         if (!accessKeyId) {
@@ -48,14 +55,6 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
     progressEl.style.cssText = 'display:none';
     textarea.parentNode.insertBefore(progressEl, textarea);
 
-    //Creating bucket
-    let bucket = new AWS.S3({
-        params: {
-            Bucket: bucketName
-        }
-    });
-
-
     inputEl.addEventListener('change', e => {
         e.preventDefault();
 
@@ -63,10 +62,8 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
         let file = inputEl.files[0],
             contentAreaContainer = editor.contentAreaContainer;
 
-
         //If file exists
         if (file) {
-
             checkContentLenghtRange(file);
 
             // Put the progress bar inside content area of TinyMCE
@@ -74,57 +71,49 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
             if (progress.bar && typeof progress.bar === 'boolean')
                 progressEl.style.cssText = 'display:block;position: absolute;z-index: 9999;width: 120px;height: 15px;right: 10px;top:45px';
 
-
             // We are uploading right now
             inProgress = true;
 
             let extension = file.name.split('.').pop(),
                 fileName = file.name.split('.' + extension)[0],
-                objKey = (folderName ? `${folderName}/` : '') + fileName + '-' + Date.now() + '.' + extension,
-                params = {
+                objKey = (folderName ? `${folderName}/` : '') + fileName + '-' + Date.now() + '.' + extension;
+
+            // Use S3 ManagedUpload class as it supports multipart uploads
+            let upload = new AWS.S3.ManagedUpload({
+                params: {
+                    Bucket: bucketName,
                     Key: objKey,
-                    ContentType: file.type,
                     Body: file,
-                    ACL: 'public-read'
-                };
-            bucket
-                .putObject(params)
-                .on('httpUploadProgress', progressObj => {
-                    let progressPercentage = parseInt((progressObj.loaded / progressObj.total) * 100);
+                    ContentType: file.type,
+                    ACL: 'public-read',
+                }
+            });
 
-                    // Change the value of progressbar. No matter if it's visible or not
-                    progressEl.value = progressPercentage;
+            const promise = upload.promise();
 
-                    // Call the callback function if it's exists
-                    if (progress.callback && typeof progress.callback === 'function')
-                        progress.callback(progressPercentage);
-
-                }).send((err, data) => {
-
+            promise.then(
+                function (data) {
+                    const newS3ImageUrl = data.Location;
                     inProgress = false;
                     progressEl.style.cssText = 'display:none';
 
-                    if (err) {
-                        if (progress.errorCallback && typeof progress.errorCallback === 'function')
-                            progress.errorCallback(err);
+                    if (progress && progress.successCallback) {
+                        progress.successCallback(editor, newS3ImageUrl);
                     } else {
-                        let url = `https://${bucketName}.s3.amazonaws.com/${objKey}`;
-                        if(progress.successCallback && typeof progress.successCallback === 'function')
-                            progress.successCallback(editor,url);
-
+                        defaultSuccessCallback(editor, newS3ImageUrl)
                     }
-                });
 
-        } else {
-
+                },
+                function (err) {
+                    return alert("There was an error uploading your photo: ", err.message);
+                }
+            );
         }
     });
 
-
-    editor.addButton('AwsS3UploadButton', {
+    editor.ui.registry.addButton('AwsS3UploadButton', {
         text: buttonText,
-        icon: false,
-        onclick(){
+        onAction: () => {
             if (!inProgress)
                 inputEl.click();
             else {
@@ -138,23 +127,37 @@ tinymce.PluginManager.add('AwsS3Upload', (editor, url)=> {
     });
 
     function checkContentLenghtRange(file) {
-      let isContentLengthOutOfRange =
-        ( typeof contentLengthRange.min === 'number' && file.size < contentLengthRange.min)
-          || (typeof contentLengthRange.max === 'number' && file.size > contentLengthRange.max );
+        let isContentLengthOutOfRange =
+            (typeof contentLengthRange.min === 'number' && file.size < contentLengthRange.min)
+            || (typeof contentLengthRange.max === 'number' && file.size > contentLengthRange.max);
 
-      if(isContentLengthOutOfRange) {
-        let err = new RangeError(
-          `The content length of '${file.name}' must be between ${contentLengthRange.min} and ${contentLengthRange.max} bytes.`
-        );
+        if (isContentLengthOutOfRange) {
+            let err = new RangeError(
+                `The content length of '${file.name}' must be between ${contentLengthRange.min} and ${contentLengthRange.max} bytes.`
+            );
 
-        //err.fileSize = file.size;
+            //err.fileSize = file.size;
 
-        if (contentLengthRange.errorCallback && typeof contentLengthRange.errorCallback === 'function')
-            contentLengthRange.errorCallback(err);
+            if (contentLengthRange.errorCallback && typeof contentLengthRange.errorCallback === 'function')
+                contentLengthRange.errorCallback(err);
 
-        throw err;
-      }
+            throw err;
+        }
     }
 
+    function defaultSuccessCallback(editor, url) {
+        // For example
+        switch (url.split('.').pop()) {
+            case 'png':
+            case 'jpg':
+            case 'jpeg': {
+                editor.execCommand('mceInsertContent', false, `<img src="${url}" style="display: block;margin: 0 auto;text-align: center; max-width:100%;" />`);
+                break;
+            }
+            default: {
+                editor.execCommand('mceInsertContent', false, `<a href="${url}">${url}</a>`);
+            }
+        }
+    }
 
 });

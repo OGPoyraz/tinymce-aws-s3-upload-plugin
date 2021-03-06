@@ -8,7 +8,7 @@ class DemoTinyMce extends React.Component {
         tinymce.init({
             selector: 'textarea',
             height: 500,
-            menubar: false,
+            menubar: true,
 
             // Plugin configuration
             plugins: 'AwsS3Upload',
