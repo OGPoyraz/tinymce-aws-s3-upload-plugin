@@ -23,7 +23,7 @@ import 'tinymce-aws-s3-upload-plugin'
 ### 2. Add AWS SDK javascript
 -You can skip this part if you done with the authentication to AWS.
 
-Add ```https://sdk.amazonaws.com/js/aws-sdk-2.5.3.min.js``` in to your html.
+Add ```https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.858.0/aws-sdk.min.js``` in to your html.
 
 #### More information about Configuring AWS SDK in the browser
 AWS doesn’t recommend to use them on front-end code(js) because if somebody take a look and get these keyId and secretKey they can reach your AWS resources.[Here you can find more information.](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/browser-configuring.html)

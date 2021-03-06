@@ -69,7 +69,7 @@
     "css-loader": "^0.25.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",
-    "node-sass": "^3.9.3",
+    "node-sass": "^5.0.0",
     "path": "^0.12.7",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
@@ -107,7 +107,7 @@
   "scripts": {
     "build": "babel --no-comments app/plugin.js -o dist/tinymce-aws-s3-upload-plugin.min.js",
     "clean": "rm -rf public",
-    "development": "npm run clean && webpack --watch",
+    "development": "webpack --watch",
     "prepublish": "npm run build"
   },
   "version": "1.0.2"
